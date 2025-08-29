@@ -1,7 +1,3 @@
-[submodule "Qt6"]
-	path = Qt6
-	url = https://github.com/Chris-AC9KH/Qt6.git
-        branch = 6.6.3
 [submodule "Hamlib"]
 	path = Hamlib
 	url = https://github.com/Chris-AC9KH/Hamlib.git
