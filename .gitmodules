@@ -4,3 +4,6 @@
 [submodule "libusb"]
 	path = libusb
 	url = https://github.com/Chris-AC9KH/libusb.git
+[submodule "Qt6"]
+	path = Qt6
+	url = https://github.com/qt/qt5.git
