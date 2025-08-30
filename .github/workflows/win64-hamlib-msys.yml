@@ -1,0 +1,82 @@
+name: Build Hamlib SDK on Windows (MSYS2)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+jobs:
+  build-hamlib-windows-msys2:
+    runs-on: windows-2025
+    permissions: write-all
+  
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          repository: 'Chris-AC9KH/Hamlib'
+          fetch-depth: 0 
+          persist-credentials: false
+          submodules: recursive
+          lfs: true
+          clean: true
+          
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true 
+          install: > 
+            git 
+            make 
+            base-devel
+            autoconf 
+            libtool 
+            pkg-config
+            zip
+          pacboy: >-
+            toolchain:p
+            autotools:p
+            cmake:p
+            ninja:p
+            libusb:p
+
+      - name: Bootstrap Hamlib build system
+        run: ./bootstrap
+
+      - name: Configure Hamlib
+        run: ./configure --prefix=/d/a/js8lib/hamlib-install
+
+      - name: Build Hamlib
+        run: make
+          
+      - name: Install Hamlib
+        run: make install-strip
+
+      - name: Upload Hamlib binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: hamlib-windows-msys2-binaries
+          path: "D:/a/js8lib/hamlib-install/"
+          
+      - name: Create zip file to upload to release page
+        run: |
+          cd "D:/a/js8lib/hamlib-install/"
+          zip -r "D:/a/js8lib/hamlib-windows-msys2-binaries-ci.zip" .
+
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2.3.2
+        with:
+          tag_name: hamlib-v4.6.4-ci
+          name: "Hamlib v4.6.4 for Windows MSYS2 CI build"
+          body: |
+            Release created automatically from commit.
+            This release is for use in the Windows MSYS2 CI builds for JS8Call. Use at your own risk!
+          files: "D:/a/js8lib/hamlib-windows-msys2-binaries-ci.zip"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
