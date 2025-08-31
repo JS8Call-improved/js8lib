@@ -82,6 +82,9 @@ fi
     sleep 5
 
 ####### Build Qt6 #######
+cd ${SUBMODULES} && git clone https://github.com/qt/qt5.git Qt6
+cd Qt6 && git checkout 6.8.1
+./init-repository --module-subset=qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg
 cd .. && mkdir qt6-build && cd qt6-build
 if  ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtimageformats,qtmultimedia,qtserialport,qtsvg
     cmake --build . --parallel
