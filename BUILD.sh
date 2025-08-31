@@ -82,12 +82,12 @@ fi
     sleep 5
 
 ####### Build Qt6 #######
-cd cd .. && mkdir qt6-build && cd qt6-build
+cd .. && mkdir qt6-build && cd qt6-build
 if  ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtimageformats,qtmultimedia,qtserialport,qtsvg
     cmake --build . --parallel
     cmake --install . ; then
     echo "--------------------------------------------------------------------"
-    echo "         Qt6-v6.6.3 build successful........."
+    echo "         Qt6 build successful........."
     echo "--------------------------------------------------------------------"
     sleep 5
     clear
