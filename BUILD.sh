@@ -19,6 +19,8 @@ PREFIX="/usr/local/js8lib"
 ARCH="$(uname -m)"
 PLATFORM="$(uname)"
 
+cd ${SUBMODULES} && git submodule update --init --recursive
+
 ####### Build libusb #######
 cd ${SUBMODULES}/libusb
 if  ./bootstrap.sh
@@ -114,13 +116,11 @@ echo "setting linker @rpath relative values for embedded libraries......"
 echo "--------------------------------------------------------------------"
 sleep 5
 
-#if [ -d ./js8lib ]; then
-#    mv ./js8lib ./js8lib_old && mkdir ./js8lib
-#  else
-#    mkdir ./js8lib
-#fi
-
-rsync -arvz /usr/local/js8lib/ ./js8lib/
+if [ -d ./js8lib ]; then
+    mv ./js8lib ./js8lib_old && mkdir ./js8lib
+  else
+    mkdir ./js8lib
+fi
 
 cd /usr/local/js8lib/lib
 install_name_tool -id @rpath/libhamlib.4.dylib libhamlib.4.dylib
@@ -128,16 +128,18 @@ install_name_tool -id @rpath/libusb-1.0.0.dylib libusb-1.0.0.dylib
 
 cd ${SUBMODULES}/..
 
+rsync -arvz /usr/local/js8lib/ ./js8lib/
+
 # create downloadable pre-built library archive
 tar -czvf js8lib-2.3_${PLATFORM}_${ARCH}.tar.gz js8lib
 
 # clean up build artifacts
-#if [ -d ./js8lib_old ]; then
-#    rm -rf ./js8lib
-#    mv ./js8lib_old ./js8lib
-#else
-#    rm -rf ./js8lib
-#fi
+if [ -d ./js8lib_old ]; then
+    rm -rf ./js8lib
+    mv ./js8lib_old ./js8lib
+else
+    rm -rf ./js8lib
+fi
 
 clear
 echo "--------------------------------------------------------------------"
