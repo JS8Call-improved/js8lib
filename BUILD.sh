@@ -19,65 +19,72 @@ PREFIX="/usr/local/js8lib"
 ARCH="$(uname -m)"
 PLATFORM="$(uname)"
 
+echo "You can choose here whether to build universal libraries or only for your"
+echo "present architecture (Intel or Apple silicon). Building universal is not"
+echo "recommended unless you have a need to deploy across both platforms."
+read -p "Build Universal libraries for both Intel and Apple silicon? Yes(y) / No(n):- " choice
+
 cd ${SUBMODULES} && git submodule update --init --recursive
 
 ####### Build libusb #######
 cd ${SUBMODULES}/libusb
-if  ./bootstrap.sh
-    ./configure --prefix=/usr/local/js8lib
+if [ "$choice" = "y" ]; then
+    ./bootstrap.sh
+    ./configure CFLAGS="-arch arm64 -arch x86_64" --prefix=${PREFIX}
+else
+    ./bootstrap.sh
+    ./configure --prefix=${PREFIX}
+fi
     make && make install
-    make clean; then
+    make clean
+    clear
     echo "--------------------------------------------------------------------"
     echo "         libusb-v1.0.29 build successful........."
     echo "--------------------------------------------------------------------"
     sleep 5
-    clear
-else
-    echo "--------------------------------------------------------------------"
-    echo "         libusb build failed........."
-    echo "--------------------------------------------------------------------"
-    exit;
-fi
 
 ####### Build Hamlib #######
 cd ../Hamlib
-if  ./bootstrap
-    ./configure --prefix=${PREFIX}
-    make && make install
-    make clean; then
-        echo "--------------------------------------------------------------------"
-        echo "         Hamlib-v4.6.4 build successful........."
-        echo "--------------------------------------------------------------------"
-        sleep 5
-        clear
+if [ "$choice" = "y" ]; then
+    ./bootstrap
+    ./configure CFLAGS="-arch arm64 -arch x86_64" --prefix=${PREFIX}
 else
-    echo "--------------------------------------------------------------------"
-    echo "         Hamlib build failed........."
-    echo "--------------------------------------------------------------------"
-    exit;
+    ./bootstrap
+    ./configure --prefix=${PREFIX}
 fi
+    make && make install
+    make clean
+    clear
+    echo "--------------------------------------------------------------------"
+    echo "         Hamlib-v4.6.4 build successful........."
+    echo "--------------------------------------------------------------------"
+    sleep 5
 
 ####### Build fftw #######
-if cd ../fftw
-./configure CFLAGS="-mmacosx-version-min=12.0" --prefix=${PREFIX} --enable-single --enable-threads 
-    make && make install
-    make clean; then
-        echo "--------------------------------------------------------------------"
-        echo "         fftw-v3.3.10 build successful........."
-        echo "--------------------------------------------------------------------"
-        sleep 5
-        clear
+cd ../fftw
+if [ "$choice" = "y" ]; then
+    ./configure CFLAGS="-mmacosx-version-min=12.0" CFLAGS="-arch arm64 -arch x86_64" --prefix=${PREFIX} --enable-single --enable-threads
 else
-    echo "--------------------------------------------------------------------"
-    echo "         fftw build failed........."
-    echo "--------------------------------------------------------------------"
-    exit;
+    ./configure CFLAGS="-mmacosx-version-min=12.0" --prefix=${PREFIX} --enable-single --enable-threads
 fi
+    make && make install
+    make clean
+    clear
+    echo "--------------------------------------------------------------------"
+    echo "         fftw-v3.3.10 build successful........."
+    echo "--------------------------------------------------------------------"
+    sleep 5
+
 
 ####### Build boost #######
-    cd ../boost
-    ./bootstrap.sh --prefix=${PREFIX}
+cd ../boost
+./bootstrap.sh --prefix=${PREFIX}
+if [ "$choice" = "y" ]; then
+    ./b2 -a address-model=64 architecture=arm+x86 install
+else
     ./b2 -a install
+fi
+    clear
     echo "--------------------------------------------------------------------"
     echo "         boost-v1.88.0 build successful........."
     echo "--------------------------------------------------------------------"
@@ -88,20 +95,18 @@ cd ${SUBMODULES} && git clone https://github.com/qt/qt5.git Qt6
 cd Qt6 && git checkout 6.8.1
 ./init-repository --module-subset=qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg
 cd .. && mkdir qt6-build && cd qt6-build
-if  ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtimageformats,qtmultimedia,qtserialport,qtsvg
+if [ "$choice" = "y" ]; then
+    ${SUBMODULES}/Qt6/configure -prefix /usr/local/js8lib -submodules qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+else
+    ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg
+fi
     cmake --build . --parallel
-    cmake --install . ; then
+    cmake --install .
+    clear
     echo "--------------------------------------------------------------------"
     echo "         Qt6 build successful........."
     echo "--------------------------------------------------------------------"
     sleep 5
-    clear
-else
-    echo "--------------------------------------------------------------------"
-    echo "         Qt6 build failed........."
-    echo "--------------------------------------------------------------------"
-    exit;
-fi
 
 cd .. && rm -rf qt6-build
 cd ${SUBMODULES} && git clean -fdx
@@ -131,7 +136,11 @@ cd ${SUBMODULES}/..
 rsync -arvz /usr/local/js8lib/ ./js8lib/
 
 # create downloadable pre-built library archive
-tar -czvf js8lib-2.3_${PLATFORM}_${ARCH}.tar.gz js8lib
+if [ "$choice" = "y" ]; then
+    tar -czvf js8lib-2.3_${PLATFORM}_universal.tar.gz js8lib
+else
+    tar -czvf js8lib-2.3_${PLATFORM}_${ARCH}.tar.gz js8lib
+fi
 
 # clean up build artifacts
 if [ -d ./js8lib_old ]; then
