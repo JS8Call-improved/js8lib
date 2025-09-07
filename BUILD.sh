@@ -63,7 +63,7 @@ fi
 ####### Build fftw #######
 cd ../fftw
 if [ "$choice" = "y" ]; then
-    ./configure CFLAGS="-mmacosx-version-min=12.0" CFLAGS="-arch arm64 -arch x86_64" --prefix=${PREFIX} --enable-single --enable-threads
+    ./configure CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=12.0" --prefix=${PREFIX} --enable-single --enable-threads
 else
     ./configure CFLAGS="-mmacosx-version-min=12.0" --prefix=${PREFIX} --enable-single --enable-threads
 fi
