@@ -90,12 +90,12 @@ fi
     echo "--------------------------------------------------------------------"
     sleep 5
 
-read -p "Build Qt6 from git sources? Select No if using external Qt build: Yes(y) / No(n):- " qt-build
+read -p "Build Qt6 from git sources? Select No if using external Qt build: Yes(y) / No(n):- " qt
 
-if [ "$qt-build" = "y" ]; then
+if [ "$qt" = "y" ]; then
 ####### Build Qt6 #######
     cd ${SUBMODULES} && git clone https://github.com/qt/qt5.git Qt6
-    cd Qt6 && git checkout 6.8.1
+    cd Qt6 && git checkout 6.8.3
     ./init-repository --module-subset=qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg
     cd .. && mkdir qt6-build && cd qt6-build
     if [ "$choice" = "y" ]; then
