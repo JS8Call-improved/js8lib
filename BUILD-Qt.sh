@@ -51,7 +51,7 @@ cd ${SUBMODULES}/..
 rsync -arvz /usr/local/Qt/ ./Qt/
 
 # create downloadable pre-built library archive
-tar -czvf jQt6.8.3_${PLATFORM}_${ARCH}.tar.gz Qt
+tar -czvf Qt6.8.3_${PLATFORM}_${ARCH}.tar.gz Qt
 
 # clean up build artifacts
 if [ -d ./Qt_old ]; then
