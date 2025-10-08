@@ -4,14 +4,13 @@
 to build the code.
 - The base repository contains the source code for FFTW-3.3.10 and Boost 1.88.0
 - Hamlib v4.6.4, libusb-1.0.29 are obtained as submodules with `git submodule update --init --recursive' by
-running the BUILD.sh script for MacOS. Building Qt 6.8.3 is optional.
-- Note the script will ask if you are building universal or architecture-dependent libraries. If you are on an Intel Mac you must select
-no or the build will fail.
+running the BUILD.sh script for. Building Qt 6.8.3 is optional.
+- Note for linux there is also a script to build a Qt6.8.3 library archive.
 
 # Building and Creating a JS8Call Library Package
 - To build a library package you must create the proper directory structure on your development machine. The following command will
 accomplish this: `sudo mkdir /usr/local/js8lib && chown <your_username> /usr/local/js8lib`
-- cd into your development root folder which can be anything you wish and clone this repository with:
+- cd into your development root folder which can be anything you wish (~/development suggested) and clone this repository with:
 ```
 git clone https://github.com/Chris-AC9KH/js8lib.git submodules
 ```
