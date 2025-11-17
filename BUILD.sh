@@ -33,7 +33,7 @@ if [ "$choice" = "y" ]; then
     ./configure CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=12.0" --prefix=${PREFIX}
 else
     ./bootstrap.sh
-    ./configure --prefix=${PREFIX}
+    ./configure CFLAGS="-mmacosx-version-min=12.0" --prefix=${PREFIX}
 fi
     make && make install
     make clean
@@ -50,7 +50,7 @@ if [ "$choice" = "y" ]; then
     ./configure CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=12.0" --prefix=${PREFIX}
 else
     ./bootstrap
-    ./configure --prefix=${PREFIX}
+    ./configure CFLAGS="-mmacosx-version-min=12.0" --prefix=${PREFIX}
 fi
     make && make install
     make clean
@@ -162,7 +162,7 @@ clear
 echo "--------------------------------------------------------------------"
 echo "   DONE!    "
 echo "library archive created"
-echo "It is recommended to try a JS8Call build using /usr/local/js8lib"
+echo "It is recommended to try a JS8Call-improved build using /usr/local/js8lib"
 echo "as the PREFIX_PATH to validate your build. If satisfied you can"
 echo "delete the files in /usr/local/js8lib"
 echo "--------------------------------------------------------------------"
