@@ -80,9 +80,9 @@ fi
 cd ../boost
 ./bootstrap.sh --prefix=${PREFIX}
 if [ "$choice" = "y" ]; then
-    ./b2 -a address-model=64 architecture=arm+x86 install
+    ./b2 cxxflags="-mmacosx-version-min=12.0" -a address-model=64 architecture=arm+x86 install
 else
-    ./b2 -a install
+    ./b2 cxxflags="-mmacosx-version-min=12.0" -a install
 fi
     clear
     echo "--------------------------------------------------------------------"
@@ -99,12 +99,13 @@ if [ "$qt" = "y" ]; then
     ./init-repository --module-subset=qtbase,qtshadertools,qtmultimedia,qtimageformats,qtserialport,qtsvg
     cd .. && mkdir qt6-build && cd qt6-build
     if [ "$choice" = "y" ]; then
-        ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtshadertools,qtmultimedia -ffmpeg-dir /usr/local/ffmpeg -ffmpeg-deploy,qtimageformats,qtserialport,qtsvg -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+        ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtshadertools,qtimageformats,qtserialport,qtsvg,qtmultimedia -ffmpeg-dir /usr/local/ffmpeg -ffmpeg-deploy -- -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
     else
-        ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtshadertools,qtmultimedia -ffmpeg-dir /usr/local/ffmpeg -ffmpeg-deploy,qtimageformats,qtserialport,qtsvg
+        ${SUBMODULES}/Qt6/configure -prefix ${PREFIX} -submodules qtbase,qtshadertools,qtimageformats,qtserialport,qtsvg,qtmultimedia -ffmpeg-dir /usr/local/ffmpeg -ffmpeg-deploy
     fi
     cmake --build . --parallel
     cmake --install .
+    
     clear
     echo "--------------------------------------------------------------------"
     echo "         Qt6 build successful........."
