@@ -56,7 +56,7 @@ fi
     make clean
     clear
     echo "--------------------------------------------------------------------"
-    echo "         Hamlib-v4.6.4 build successful........."
+    echo "         Hamlib-v4.6.5 build successful........."
     echo "--------------------------------------------------------------------"
     sleep 5
 
@@ -146,9 +146,9 @@ rsync -arvz /usr/local/js8lib/ ./js8lib/
 
 # create downloadable pre-built library archive
 if [ "$choice" = "y" ]; then
-    tar -czvf js8lib-2.4_${PLATFORM}_universal.tar.gz js8lib
+    tar -czvf js8lib-MacOS_universal.tar.gz js8lib
 else
-    tar -czvf js8lib-2.4_${PLATFORM}_${ARCH}.tar.gz js8lib
+    tar -czvf js8lib-MacOS_${ARCH}.tar.gz js8lib
 fi
 
 # clean up build artifacts
