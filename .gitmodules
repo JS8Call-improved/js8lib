@@ -1,3 +1,6 @@
 [submodule "libusb"]
 	path = libusb
 	url = https://github.com/Chris-AC9KH/libusb.git
+[submodule "Hamlib"]
+	path = Hamlib
+	url = https://github.com/Hamlib/Hamlib.git
