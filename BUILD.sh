@@ -7,7 +7,7 @@ set -e
 # --- Variables ---
 # set these to configure the build
 LIB_VERSION="4.0"
-QT_VERSION="6.12.0-beta2"
+QT_VERSION="6.12.0-beta4"
 HAMLIB_TAG="4.7.2"
 MACOS_MIN="14.4"
 
@@ -109,8 +109,12 @@ if [ "$qt" = "y" ]; then
     mkdir -p "${SUBMODULES}/qt6-build"
     cd "${SUBMODULES}/qt6-build"
     "${SUBMODULES}/Qt6/configure" -prefix "${PREFIX}" \
+        -no-opengl \
+        -nomake examples \
+        -nomake tests \
         -ffmpeg-dir /usr/local/ffmpeg \
         -ffmpeg-deploy
+
     cmake --build . --parallel
     cmake --install .
 
