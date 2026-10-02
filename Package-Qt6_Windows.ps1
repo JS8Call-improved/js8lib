@@ -1,5 +1,5 @@
 # ==============================================================================
-# Fixed PowerShell Script: Pack Qt 6.12.0-beta2 for GitHub Runners
+# Fixed PowerShell Script: Pack Qt 6.12.0 for GitHub Runners
 # ==============================================================================
 $ErrorActionPreference = "Stop"
 
