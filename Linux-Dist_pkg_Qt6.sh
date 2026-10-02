@@ -126,7 +126,7 @@ fi
 cd "$HOME/development"
 git clone https://github.com/qt/qt5.git Qt6
 cd Qt6
-git checkout v6.12.0-beta2
+git checkout v6.12.0
 ./init-repository --module-subset=qtbase,qtshadertools,qtmultimedia,\
 qtimageformats,qtserialport,qtsvg,qtwebsockets,qtwayland,\
 qtdeclarative,qttools,qtpositioning,qttranslations,qtlanguageserver,\
